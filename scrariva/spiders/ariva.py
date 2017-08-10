@@ -12,7 +12,7 @@ class Ariva(scrapy.Spider):
         self.url_base = 'http://www.ariva.de'
         self.url_overview = self.url_base + '/{}'
         self.url_hist = self.url_base + '/{}/historische_kurse'
-        self.url_download = self.url_base + '/quote/historic/historic.csv?secu={}&min_time={}&max_time={}&trenner=%3B&go=Download'
+        self.url_download = self.url_base + '/quote/historic/historic.csv?secu={}&boerse_id=12&min_time={}&max_time={}&trenner=%3B&go=Download'
         self.date_format = "DD.MM.YYYY"
 
     def start_requests(self):

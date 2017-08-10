@@ -16,5 +16,5 @@ if __name__ == '__main__':
     isin = sys.argv[1]
 
     process = CrawlerProcess(get_project_settings())
-    process.crawl(Ariva, isin=isin)
+    process.crawl(Ariva, isin=isin, outdir='.')
     process.start()

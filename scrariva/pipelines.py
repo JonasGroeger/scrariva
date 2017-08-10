@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import csv
+from backports import csv
 import json
 import os
 import io
@@ -14,8 +16,9 @@ from scrapy.utils.project import get_project_settings
 
 class PortfolioPerformanceCSVWriter(object):
     def __init__(self):
-        save_dir = get_project_settings().get("SAVE_DIR")
-        self.save_file = os.path.join(save_dir, "{}_{}_to_{}.csv")
+        resource_base_path = get_project_settings().get("RESOURCE_BASE_PATH")
+        self.save_file = os.path.join(resource_base_path, "{}_{}_to_{}.csv")
+        print("Saving .csv to {}".format(self.save_file))
 
     def process_item(self, item, spider):
         isin = spider.isin
@@ -38,20 +41,8 @@ class PortfolioPerformanceCSVWriter(object):
 
         output_filename = self.save_file.format(isin, min_time, max_time)
 
-        with open(output_filename, 'w', newline='') as output:
+        with io.open(output_filename, 'w', newline='', encoding='UTF-8') as output:
             writer = csv.writer(output, delimiter=';')
             writer.writerow(['Datum', 'Kurs'])
             for t in result:
                 writer.writerow([t[0], t[1]])
-
-
-class JsonWriterPipeline(object):
-    def __init__(self):
-        save_dir = get_project_settings().get("SAVE_DIR")
-        self.save_file = os.path.join(save_dir, "{}.json")
-
-    def process_item(self, item, spider):
-        isin = spider.isin
-        with open(self.save_file.format(str(isin)), 'w') as json_file:
-            json_file.write(json.dumps(dict(item)) + "\n")
-        return item

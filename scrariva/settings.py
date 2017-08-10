@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
 # Scrapy settings for scrariva project
 #
@@ -21,10 +22,19 @@ LOG_LEVEL = 'WARN'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scrariva (+http://www.yourdomain.com)'
 
-SAVE_DIR = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "data")
+# Create the resources path
+try:
+    base_path = sys._MEIPASS
+except Exception:
+    base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RESOURCE_BASE_PATH = os.path.join(base_path, 'data')
+if not os.path.exists(RESOURCE_BASE_PATH):
+    os.makedirs(RESOURCE_BASE_PATH)
+
+print("Setting RESOURCE_BASE_PATH to {}".format(RESOURCE_BASE_PATH))
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
